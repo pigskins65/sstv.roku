@@ -2,9 +2,9 @@ function smoothservice() as object
     
     constants={
         AUTH_URL: "https://auth.smoothstreams.tv/hash_api.php",
+        MMA_AUTH_URL: "https://www.mma-tv.net/loginForm.php",
         'FEED_URL: "http://guide.smoothstreams.tv/feed.json"
         FEED_URL: "http://sstv.getenjoyment.net/ss_roku3hr.json"
-        'FEED_URL: "https://s3.amazonaws.com/files.leagueathletics.com/Images/Club/6545/Temp/ss_roku3hr.json"
     }
     
     loginResult=""
@@ -31,7 +31,12 @@ function smoothService_authenticate(username as string, password as string, site
     ' try to login
     loginUrlTransfer = CreateObject("roUrlTransfer")
     loginUrlTransfer.SetCertificatesFile("common:/certs/ca-bundle.crt")
-    loginUrl = m.constants.AUTH_URL + "?username=" + loginUrlTransfer.escape(username)
+    'print loginUrlTransfer.escape(site) + " " + site
+    if site = "viewmmasr" then
+      loginUrl = m.constants.MMA_AUTH_URL + "?username=" + loginUrlTransfer.escape(username)
+    else
+      loginUrl = m.constants.AUTH_URL + "?username=" + loginUrlTransfer.escape(username)
+    end if
     loginUrl = loginUrl + "&password=" + loginUrlTransfer.escape(password)
     loginUrl = loginUrl + "&site=" + loginUrlTransfer.escape(site)
     loginUrlTransfer.SetURL(loginUrl)
@@ -54,11 +59,6 @@ end function
     
 function smoothService_sites() as object
     return {
-        ms: {
-          name: "MyStreams & uSport",
-          service: "viewms",
-          port: "3655"
-        },
         l247: {
           name: "Live 247",
           service: "view247",
@@ -70,8 +70,8 @@ function smoothService_sites() as object
           port: "3665"
         },
         mma: {
-          name: "MMA-TV / MyShout",
-          service: "viewmma",
+          name: "MMA SR+",
+          service: "viewmmasr",
           port: "3645"
         },
         stvn: {
@@ -87,27 +87,37 @@ function smoothService_servers() as object
       EUAmsterdam: {
         name: "EU Amsterdam 1",
         url: "dEU-NL1.SmoothStreams.tv",
-        port:   "443"
+        port: "443"
       },
       EUAmsterdam2: {
         name: "EU Amsterdam 2",
         url: "dEU-NL2.SmoothStreams.tv",
-        port:   "443"
+        port: "443"
       },
       EUFrankfurt: {
         name: "EU Amsterdam 3",
         url: "dEU-NL3.SmoothStreams.tv",
         port: "443"
       },
+      EUBreda: {
+        name: "EU Amsterdam 4",
+        url: "dEU-NL4.SmoothStreams.tv",
+        port: "443"
+      },
+      EUEnschede: {
+        name: "EU Amsterdam 5",
+        url: "dEU-NL5.SmoothStreams.tv",
+        port: "443"
+      },
       EULondon: {
         name: "EU London 1",
         url: "dEU-UK1.SmoothStreams.tv",
-        port:   "443"
+        port: "443"
       },
       EULondon2: {
         name: "EU London 2",
         url: "dEU-UK2.SmoothStreams.tv",
-        port:   "443"
+        port: "443"
       },
       USEastNJ: {
         name: "US East NJ",
@@ -127,16 +137,6 @@ function smoothService_servers() as object
       CANEastTwo: {
         name: "CAN East TOR",
         url: "dNAE4.SmoothStreams.tv",
-        port: "443"
-      },
-      Asia: {
-        name: "Asia",
-        url: "dSG.SmoothStreams.tv",
-        port: "443"
-      },
-      Asiatwo: {
-        name: "Asia 2",
-        url: "dap.SmoothStreams.tv",
         port: "443"
       },
       USEastNY: {
@@ -162,6 +162,16 @@ function smoothService_servers() as object
       USWestfour: {
         name: "US West CHI",
         url: "dNAw4.smoothstreams.tv",
+        port: "443"
+      }
+      Asia: {
+        name: "Asia",
+        url: "dSG.SmoothStreams.tv",
+        port: "443"
+      },
+      Asiatwo: {
+        name: "Asia 2",
+        url: "dap.SmoothStreams.tv",
         port: "443"
       }
     }
